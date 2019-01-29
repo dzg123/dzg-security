@@ -22,10 +22,11 @@ import java.util.List;
  **/
 @RestController
 @Slf4j
+@RequestMapping("/user")
 public class UserController {
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @GetMapping
     @JsonView(User.UserSimpleView.class)
-    public List<User> query(UserQueryCondition condition, @PageableDefault(page = 0,size = 15,sort = "age,asc") Pageable pageable) {
+    public List<User> query(UserQueryCondition condition, @PageableDefault(page = 0, size = 15, sort = "age,asc") Pageable pageable) {
         log.info(ReflectionToStringBuilder.toString(condition, ToStringStyle.MULTI_LINE_STYLE));
         log.info(ReflectionToStringBuilder.toString(pageable, ToStringStyle.MULTI_LINE_STYLE));
         ArrayList<User> list = Lists.newArrayList();
@@ -34,9 +35,10 @@ public class UserController {
         list.add(new User());
         return list;
     }
-    @GetMapping(value = "/user/{id:\\d+}")
+
+    @GetMapping(value = "/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
-    public User getInfo(@PathVariable("id") String id){
+    public User getInfo(@PathVariable("id") String id) {
         User user = new User();
         user.setUsername("dzg");
         return user;

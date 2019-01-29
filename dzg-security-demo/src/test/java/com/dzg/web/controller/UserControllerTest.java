@@ -36,7 +36,7 @@ public class UserControllerTest {
     @Test
     public void whenQuerySuccess() {
         try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/user")
+            String result = mockMvc.perform(MockMvcRequestBuilders.get("/user")
                     .param("username", "dzg")
 //                    .param("page","2")
 //                    .param("size","10")
@@ -45,6 +45,7 @@ public class UserControllerTest {
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3))
                     .andReturn().getResponse().getContentAsString();
+            log.info("result:{}", result);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,10 +54,12 @@ public class UserControllerTest {
     @Test
     public void whenGetInfoSuccess() {
         try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/user/1")
+            String result = mockMvc.perform(MockMvcRequestBuilders.get("/user/1")
                     .contentType(MediaType.APPLICATION_JSON_UTF8))
                     .andExpect(MockMvcResultMatchers.status().isOk())
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("dzg"));
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("dzg"))
+                    .andReturn().getResponse().getContentAsString();
+            log.info("result:{}", result);
         } catch (Exception e) {
             e.printStackTrace();
         }
