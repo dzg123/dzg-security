@@ -14,6 +14,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 /**
  * @program: dzg-security
  * @description: User测试类
@@ -71,6 +75,46 @@ public class UserControllerTest {
             mockMvc.perform(MockMvcRequestBuilders.get("/user/a")
                     .contentType(MediaType.APPLICATION_JSON_UTF8))
                     .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void whenCreateSuccess() {
+        try {
+            Date date = new Date();
+            String content = "{\"username\":\"dzg\",\"password\":\"123\",\"birthday\":" + date.getTime() + "}";
+            String result = mockMvc.perform(MockMvcRequestBuilders.post("/user").contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .content(content))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
+                    .andReturn().getResponse().getContentAsString();
+            log.info("date:{},\tresult:{}",date.getTime(), result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void whenUpdateSuccess() {
+        try {
+            Date date = new Date(LocalDateTime.now().atZone(ZoneId.systemDefault()).plusYears(1).toInstant().toEpochMilli());
+            String content = "{\"id\":1,\"username\":\"dzg\",\"password\":\"123\",\"birthday\":" + date.getTime() + "}";
+            String result = mockMvc.perform(MockMvcRequestBuilders.put("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .content(content))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
+                    .andReturn().getResponse().getContentAsString();
+            log.info("date:{},\tresult:{}",date.getTime(), result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void whenDeleteSuccess(){
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.delete("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8))
+                    .andExpect(MockMvcResultMatchers.status().isOk());
         } catch (Exception e) {
             e.printStackTrace();
         }
