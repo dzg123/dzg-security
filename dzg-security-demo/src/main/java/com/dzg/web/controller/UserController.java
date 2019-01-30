@@ -9,8 +9,11 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +27,31 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/user")
 public class UserController {
+    @PostMapping
+    public User create(@Valid @RequestBody User user, BindingResult errors) {
+        if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach(error -> log.info(error.getDefaultMessage()));
+        }
+        log.info(ReflectionToStringBuilder.toString(user, ToStringStyle.MULTI_LINE_STYLE));
+        user.setId(1);
+        return user;
+
+    }
+
+    @PutMapping("/{id:\\d+}")
+    public User update(@Valid @RequestBody User user, BindingResult errors) {
+        if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach(error -> {
+//                FieldError fieldError = (FieldError) error;
+//                String message = fieldError.getField() + "\t" + error.getDefaultMessage();
+                log.info(error.getDefaultMessage());
+            });
+        }
+        log.info(ReflectionToStringBuilder.toString(user, ToStringStyle.MULTI_LINE_STYLE));
+        return user;
+
+    }
+
     @GetMapping
     @JsonView(User.UserSimpleView.class)
     public List<User> query(UserQueryCondition condition, @PageableDefault(page = 0, size = 15, sort = "age,asc") Pageable pageable) {
@@ -42,5 +70,11 @@ public class UserController {
         User user = new User();
         user.setUsername("dzg");
         return user;
+    }
+
+    @DeleteMapping("/{id:\\d+}")
+    public void delete(@PathVariable String id) {
+        log.info("id:{}", id);
+
     }
 }
