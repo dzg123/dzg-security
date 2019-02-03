@@ -2,6 +2,7 @@ package com.dzg.web.controller;
 
 import com.dzg.dto.User;
 import com.dzg.dto.UserQueryCondition;
+import com.dzg.exception.UserNotExistException;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -67,9 +68,10 @@ public class UserController {
     @GetMapping(value = "/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable("id") String id) {
-        User user = new User();
-        user.setUsername("dzg");
-        return user;
+        throw new UserNotExistException("user not exist22",id);
+//        User user = new User();
+//        user.setUsername("dzg");
+//        return user;
     }
 
     @DeleteMapping("/{id:\\d+}")
