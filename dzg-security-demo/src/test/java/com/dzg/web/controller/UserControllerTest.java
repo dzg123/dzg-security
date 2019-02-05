@@ -7,7 +7,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -35,6 +37,20 @@ public class UserControllerTest {
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
+
+    @Test
+    public void whenUploadSuccess() {
+        try {
+            String file = mockMvc.perform(MockMvcRequestBuilders.fileUpload("/file")
+                    .file(new MockMultipartFile("file", "test.txt",
+                            "multipart/form-data", "hello upload".getBytes("UTF-8"))))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andReturn().getResponse().getContentAsString();
+            log.info("file:{}",file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -90,11 +106,12 @@ public class UserControllerTest {
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
                     .andReturn().getResponse().getContentAsString();
-            log.info("date:{},\tresult:{}",date.getTime(), result);
+            log.info("date:{},\tresult:{}", date.getTime(), result);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @Test
     public void whenUpdateSuccess() {
         try {
@@ -105,13 +122,14 @@ public class UserControllerTest {
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
                     .andReturn().getResponse().getContentAsString();
-            log.info("date:{},\tresult:{}",date.getTime(), result);
+            log.info("date:{},\tresult:{}", date.getTime(), result);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @Test
-    public void whenDeleteSuccess(){
+    public void whenDeleteSuccess() {
         try {
             mockMvc.perform(MockMvcRequestBuilders.delete("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8))
                     .andExpect(MockMvcResultMatchers.status().isOk());
