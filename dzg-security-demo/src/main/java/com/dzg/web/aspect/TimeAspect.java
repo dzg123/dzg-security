@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
  * @author: dzg
  * @create: 2019-02-04 22:33
  **/
-@Aspect
-@Component
+//@Aspect
+//@Component
 @Slf4j
 public class TimeAspect {
     @Around("execution(* com.dzg.web.controller.UserController.*(..))")

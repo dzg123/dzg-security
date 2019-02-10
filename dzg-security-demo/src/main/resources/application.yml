@@ -12,3 +12,14 @@ spring:
       password: 123
 server:
   port: 8090
+dzg:
+  security:
+    browser:
+      loginType: REDIRECT
+#dzg:
+#  security:
+#    browser:e
+#      loginPage: /demo-login.html
+logging:
+  level:
+    io.swagger.models.parameters.AbstractSerializableParameter: error

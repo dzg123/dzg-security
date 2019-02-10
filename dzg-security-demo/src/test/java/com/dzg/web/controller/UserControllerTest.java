@@ -42,6 +42,7 @@ public class UserControllerTest {
     @Test
     public void whenUploadSuccess() {
         try {
+
             String file = mockMvc.perform(MockMvcRequestBuilders.fileUpload("/file")
                     .file(new MockMultipartFile("file", "test.txt",
                             "multipart/form-data", "hello upload".getBytes("UTF-8"))))

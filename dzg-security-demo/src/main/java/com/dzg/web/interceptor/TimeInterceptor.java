@@ -23,8 +23,8 @@ public class TimeInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("preHandle");
-        log.info(((HandlerMethod) handler).getBean().getClass().getName());
-        log.info(((HandlerMethod) handler).getMethod().getName());
+//        log.info(((HandlerMethod) handler).getBean().getClass().getName());
+//        log.info(((HandlerMethod) handler).getMethod().getName());
         request.setAttribute("startTime", new Date().getTime());
         return true;
     }
